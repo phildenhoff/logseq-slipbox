@@ -1,5 +1,5 @@
 {
-  "name": "logseq-plugin-template-svelte",
+  "name": "logseq-slipbox",
   "private": false,
   "license": "MIT",
   "version": "0.1.0",
@@ -36,11 +36,11 @@
     "vitest": "^0.24.1"
   },
   "logseq": {
-    "id": "logseq-plugin-template-svelte",
-    "description": "A template for Logseq plugins",
-    "title": "Logseq Plugin Template",
-    "author": "you!",
+    "id": "logseq-slipbox",
+    "description": "Text notes to your Logseq graph.",
+    "title": "Logseq Slipbox",
+    "author": "phildenhoff",
     "icon": "./public/logo.svg",
-    "repo": "phildenhoff/logseq-plugin-template-svelte"
+    "repo": "phildenhoff/logseq-slipbox"
   }
 }
