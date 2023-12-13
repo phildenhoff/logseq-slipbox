@@ -1,0 +1,30 @@
+name: Component tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+    - uses: pnpm/action-setup@v2.2.2
+      with:
+        version: 6.0.2
+    - name: Install dependencies
+      run: pnpm install
+    - name: Install browsers
+      run: npx playwright install --with-deps chromium
+    - name: Run component tests
+      run: pnpm test:e2e
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
