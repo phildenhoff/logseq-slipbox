@@ -19,10 +19,6 @@ const app = new Application<AppState>();
 app.use(logRequest, timeRequest);
 app.use(updateAuthState);
 
-const getQueueNameForUser = (userLogin: string) => {
-  return `user.notes.${userLogin}`;
-};
-
 const authenticatedRoutes = new Router<AuthorizedAppState>({
   prefix: "/api/v1",
 });
@@ -30,7 +26,7 @@ authenticatedRoutes.get("/whoami", (ctx) => {
   const userLogin = ctx.state.user.login;
   const userName = ctx.state.user.name;
   const userPic = ctx.state.user.pic;
-  ctx.response.body = `<html><p>Hello, ${userName}!</p> <img src="${userPic}" /></html>`;
+  ctx.response.body = `<html><p>Hello, ${userName} (${userLogin})!</p> <img src="${userPic}" /></html>`;
 });
 authenticatedRoutes.post("/note", async (ctx) => {
   const userLogin = ctx.state.user.login;
