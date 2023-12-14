@@ -1,4 +1,8 @@
-import { Middleware, Context } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import {
+  Middleware,
+  Context,
+  Next,
+} from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { AppState, AuthorizedMiddleware } from "./_types.ts";
 import { requireTailscaleHeaders } from "./tailscale.ts";
 
@@ -23,4 +27,16 @@ export const requireAuthorization = (
     // @ts-ignore: TS doesn't believe that the user is authorized
     await resolver(ctx, next);
   };
+};
+
+export const authorizedOr401 = async (
+  ctx: Context<AppState, AppState>,
+  next: Next
+) => {
+  if (ctx.state.user.__type === "unauthorized") {
+    ctx.response.status = 401;
+    return;
+  }
+
+  await next();
 };

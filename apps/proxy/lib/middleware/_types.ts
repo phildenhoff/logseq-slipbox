@@ -14,6 +14,9 @@ export type UnauthorizedUser = {
 export type AppState = {
   user: IdentifiedUser | UnauthorizedUser;
 };
+export type AuthorizedAppState = Omit<AppState, "user"> & {
+  user: IdentifiedUser;
+};
 
 export type AuthorizedMiddleware = Middleware<
   { user: IdentifiedUser } & Omit<AppState, "user">
