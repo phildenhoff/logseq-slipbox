@@ -6,7 +6,7 @@ import logseqDevPlugin from "vite-plugin-logseq";
 export default defineConfig({
   server: {
     host: true,
-    port: 8000,
+    port: 3000,
   },
   build: {
     target: ["es2020"],
@@ -16,7 +16,5 @@ export default defineConfig({
       target: "es2020",
     },
   },
-  plugins: [
-    svelte(), //logseqDevPlugin.default()
-  ],
+  plugins: [svelte(), logseqDevPlugin.default()],
 });
