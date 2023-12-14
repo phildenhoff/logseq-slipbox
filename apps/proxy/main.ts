@@ -19,16 +19,23 @@ const app = new Application<AppState>();
 app.use(logRequest, timeRequest);
 app.use(updateAuthState);
 
-const authenticatedRoutes = new Router<AuthorizedAppState>({
+const uiRoutesWithAuth = new Router<AuthorizedAppState>();
+uiRoutesWithAuth.get("/", (ctx) => {
+  ctx.response.body = Deno.readTextFileSync("./pages/index.html");
+});
+app.use(uiRoutesWithAuth.routes());
+app.use(uiRoutesWithAuth.allowedMethods());
+
+const apiRoutesWithAuth = new Router<AuthorizedAppState>({
   prefix: "/api/v1",
 });
-authenticatedRoutes.get("/whoami", (ctx) => {
+apiRoutesWithAuth.get("/whoami", (ctx) => {
   const userLogin = ctx.state.user.login;
   const userName = ctx.state.user.name;
   const userPic = ctx.state.user.pic;
   ctx.response.body = `<html><p>Hello, ${userName} (${userLogin})!</p> <img src="${userPic}" /></html>`;
 });
-authenticatedRoutes.post("/note", async (ctx) => {
+apiRoutesWithAuth.post("/note", async (ctx) => {
   const userLogin = ctx.state.user.login;
   const { content } = await ctx.request.body().value;
 
@@ -38,7 +45,7 @@ authenticatedRoutes.post("/note", async (ctx) => {
   ctx.response.status = 200;
   ctx.response.body = "OK";
 });
-authenticatedRoutes.get("/notes", async (ctx) => {
+apiRoutesWithAuth.get("/notes", async (ctx) => {
   const userLogin = ctx.state.user.login;
 
   const userId = userIdFromLogin(userLogin);
@@ -48,7 +55,7 @@ authenticatedRoutes.get("/notes", async (ctx) => {
   ctx.response.status = 200;
 });
 app.use(authorizedOr401);
-app.use(authenticatedRoutes.routes());
-app.use(authenticatedRoutes.allowedMethods());
+app.use(apiRoutesWithAuth.routes());
+app.use(apiRoutesWithAuth.allowedMethods());
 
 await app.listen({ hostname: "127.0.0.1", port: 8000 });

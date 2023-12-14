@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      const onSubmit = (/** @type {FormDataEvent} */ event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const form = document.querySelector("form");
+        const data = new FormData(form);
+        const jsonData = JSON.stringify(Object.fromEntries(data.entries()));
+
+        fetch("/api/v1/note", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("HTTP status " + response.status);
+            }
+            return response.body;
+          })
+          .then((data) => {
+            const successEl = document.getElementById("success");
+            successEl.parentElement.hidden = false;
+            successEl.textContent = "Note saved.";
+            setTimeout(() => {
+              successEl.parentElement.hidden = true;
+            }, 2000);
+          })
+          .catch((error) => {
+            const errorElement = document.getElementById("error_summary");
+            errorElement.parentElement.hidden = false;
+            errorElement.textContent = "Error, your note was not saved.";
+
+            const errorDeetsEl = document.getElementById("error_details");
+            errorDeetsEl.textContent = error.message;
+            console.error({ error });
+            setTimeout(() => {
+              errorElement.parentElement.hidden = true;
+            }, 5000);
+          });
+      };
+    </script>
+  </head>
+  <body>
+    <div class="p-5 m-4 flex flex-col items-center max-w-full max-h-full">
+      <h1 class="text-3xl font-bold mb-3">Logseq Slipbox</h1>
+
+      <form class="flex flex-col" onsubmit="onSubmit(event)">
+        <textarea
+          class="border-2 rounded-md border-gray-300 w-72 h-36 p-2 mb-2"
+          name="content"
+          placeholder="I had this great idea..."
+        ></textarea>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+        >
+          Save
+        </button>
+        <div
+          class="bg-red-100 border-red-300 rounded-lg border-2 p-4 mt-5"
+          hidden
+        >
+          <p id="error_summary" class="text-red-500 mb-2 text-lg font-bold"></p>
+          <p id="error_details" class="text-red-500"></p>
+        </div>
+        <div
+          class="bg-blue-100 border-blue-300 rounded-lg border-2 p-4 mt-5"
+          hidden
+        >
+          <p id="success" class="text-blue-500"></p>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
