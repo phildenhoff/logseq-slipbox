@@ -45,7 +45,7 @@ apiRoutesWithAuth.post("/note", async (ctx) => {
   ctx.response.status = 200;
   ctx.response.body = "OK";
 });
-apiRoutesWithAuth.get("/notes", async (ctx) => {
+apiRoutesWithAuth.get("/notes", (ctx) => {
   const userLogin = ctx.state.user.login;
 
   const userId = userIdFromLogin(userLogin);
