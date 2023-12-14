@@ -8,7 +8,7 @@
   <main>
     <div>
       <a href="https://vitejs.dev" target="_blank">
-        <img src="/logo.svg" class="logo" alt="Vite Logo" />
+        <img src="/logo.png" class="logo" alt="Vite Logo" />
       </a>
       <a href="https://svelte.dev" target="_blank">
         <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />

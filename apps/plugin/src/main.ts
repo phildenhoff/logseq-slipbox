@@ -18,7 +18,9 @@ const main = async () => {
 
   logseq.App.registerUIItem("toolbar", {
     key: "slipbox",
-    template: `<a data-on-click="show" id="slipbox" class="toolbar-button" >⌘</a>`,
+    template: `<a data-on-click="show" id="slipbox" class="button">
+      <img src="https://raw.githubusercontent.com/phildenhoff/logseq-slipbox/main/apps/plugin/public/logo.png" width="24" height="24" />
+    </a>`,
   });
 };
 
