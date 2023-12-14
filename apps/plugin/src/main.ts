@@ -1,5 +1,4 @@
 import "./app.pcss";
-import "./app.pcss";
 import "@logseq/libs";
 import App from "./App.svelte";
 
