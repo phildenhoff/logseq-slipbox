@@ -4,9 +4,10 @@
   };
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   id="clickOutCaptureContainer"
-  class="backdrop-blur-md"
+  class="grid"
   on:click={close}
   on:keydown={(event) => (event.key === "Escape" ? close() : () => {})}
 >

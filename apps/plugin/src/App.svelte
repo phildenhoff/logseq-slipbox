@@ -1,50 +1,57 @@
 <script lang="ts">
-  import svelteLogo from "./assets/svelte.svg";
-  import ClickOutCaptureContainer from "./components/ClickOutCaptureContainer.svelte";
-  import Counter from "./components/Counter.svelte";
+  import { writable } from "svelte/store";
+  import DialogContainer from "./components/DialogContainer.svelte";
+  import type { PageEntity } from "@logseq/libs/dist/LSPlugin.user";
+  const notes = writable<Array<string>>([]);
+
+  const a = () => {
+    fetch("https://carafe.beardie-cloud.ts.net/api/v1/notes").then(
+      async (res) => {
+        notes.set((await res.json()).notes);
+      },
+    );
+  };
+
+  const insertNote = async (note: string) => {
+    // todays date, formatted as YYYYMMDD
+    const todaysDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+
+    const todayPage = (
+      (await logseq.DB.datascriptQuery(`[
+      :find (pull ?p [*])
+      :where
+      [?b :block/page ?p]
+      [?p :block/journal? true]
+      [?p :block/journal-day ?d]
+      [(= ?d ${todaysDate})]
+    ]`)) as PageEntity[][]
+    )[0][0];
+    logseq.Editor.insertBlock(todayPage.uuid, note);
+  };
+
+  notes.subscribe((next) => {
+    next.forEach((note) => {
+      insertNote(note);
+    });
+  });
 </script>
 
-<ClickOutCaptureContainer>
-  <main>
-    <div>
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/logo.png" class="logo" alt="Vite Logo" />
-      </a>
-      <a href="https://svelte.dev" target="_blank">
-        <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-      </a>
-    </div>
-    <h1>Vite + Svelte</h1>
-
-    <div class="card">
-      <Counter />
+<DialogContainer>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <main
+    class="mt-12 bg-white max-w-md h-min justify-self-end mr-8 p-4 rounded-md shadow-md"
+    on:click|stopPropagation|preventDefault={() => undefined}
+  >
+    <div class="mb-4">
+      <button on:click={a}>Add notes from slipbox</button>
     </div>
 
-    <p>
-      Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank"
-        >SvelteKit</a
-      >, the official Svelte app framework powered by Vite!
-    </p>
-
-    <p class="read-the-docs">
-      Click on the Vite and Svelte logos to learn more
+    <p class=" text-gray-500">
+      Visit <a href="https://slipbox">https://slipbox</a> on your phone to add notes.
     </p>
   </main>
-</ClickOutCaptureContainer>
+</DialogContainer>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
 </style>
