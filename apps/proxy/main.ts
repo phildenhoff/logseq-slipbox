@@ -12,8 +12,19 @@ import {
   allUserUnprocessedNotes,
   userIdFromLogin,
 } from "./models/notes.ts";
+import { createDb } from "./tools/db_setup.ts";
 
-const db = new DB("slipbox.db");
+const dbPath = Deno.args[0];
+
+// Create DB if it doesn't exist
+try {
+  Deno.statSync(dbPath);
+  // Database exists; do nothing.
+} catch {
+  createDb(dbPath);
+}
+
+const db = new DB(dbPath);
 const app = new Application<AppState>();
 
 app.use(logRequest, timeRequest);
@@ -58,4 +69,5 @@ app.use(authorizedOr401);
 app.use(apiRoutesWithAuth.routes());
 app.use(apiRoutesWithAuth.allowedMethods());
 
-await app.listen({ hostname: "127.0.0.1", port: 8000 });
+console.log("Listening on http://0.0.0.0:8000");
+await app.listen({ hostname: "0.0.0.0", port: 8000 });

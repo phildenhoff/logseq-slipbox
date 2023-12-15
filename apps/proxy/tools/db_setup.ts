@@ -1,11 +1,12 @@
 import { DB } from "https://deno.land/x/sqlite@v3.8/mod.ts";
 
-const db = new DB("slipbox.db");
+export const createDb = (path: string) => {
+  const db = new DB(path);
 
-db.execute(`
+  db.execute(`
   DROP TABLE IF EXISTS "notes";
 `);
-db.execute(`
+  db.execute(`
 CREATE TABLE "notes" (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   "content" TEXT,
@@ -13,3 +14,8 @@ CREATE TABLE "notes" (
   "times_processed" integer NOT NULL DEFAULT '0'
 , "user_id" TEXT NOT NULL);
 `);
+};
+
+if (import.meta.main) {
+  createDb("slipbox.db");
+}
