@@ -12,6 +12,10 @@
     });
   };
 
+  const b = () => {
+    logseq.showSettingsUI();
+  };
+
   const insertNote = async (note: string) => {
     // todays date, formatted as YYYYMMDD
     const todaysDate = new Date()
@@ -48,18 +52,43 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <main
-    class="mt-12 bg-white max-w-md h-min justify-self-end mr-8 p-4 rounded-md shadow-md"
+    class="mt-12 max-w-md h-min justify-self-end mr-8 p-4 rounded-md shadow-md"
     on:click|stopPropagation|preventDefault={() => undefined}
   >
-    <div class="mb-4">
+    <div class="mb-4 flex justify-between">
       <button on:click={a}>Add notes from slipbox</button>
+      <button on:click={b}>⚙️</button>
     </div>
 
-    <p class=" text-gray-500">
-      Visit <a href="https://slipbox">https://slipbox</a> on your phone to add notes.
+    <p class="diminished">
+      <!-- svelte-ignore a11y-invalid-attribute -->
+      Visit
+      <a
+        href="#"
+        on:click|preventDefault={() => {
+          window.open(endpointUrl, "_blank");
+        }}>{endpointUrl}</a
+      > on your phone to add notes.
     </p>
   </main>
 </DialogContainer>
 
 <style>
+  main {
+    background-color: #0f0f14;
+  }
+
+  p.diminished {
+    color: rgb(148, 148, 168);
+  }
+
+  @media (prefers-color-scheme: light) {
+    main {
+      background-color: #fff;
+    }
+
+    p.diminished {
+      color: rgb(97, 97, 120);
+    }
+  }
 </style>
