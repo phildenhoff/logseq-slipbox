@@ -1,13 +1,19 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
+  import { derived, writable } from "svelte/store";
   import DialogContainer from "./components/DialogContainer.svelte";
   import type { PageEntity } from "@logseq/libs/dist/LSPlugin.user";
+  import { SETTING_ENUM } from "./libs/settings";
   const notes = writable<Array<string>>([]);
+  const endpointBaseUrl = writable<string>(
+    logseq.settings[SETTING_ENUM.apiUrl],
+  );
 
-  const endpointUrl = "https://slipbox.beardie-cloud.ts.net/api/v1/notes";
+  const apiUrl = derived(endpointBaseUrl, (endpointBaseUrl) => {
+    return `${endpointBaseUrl}/api/v1/notes`;
+  });
 
   const a = () => {
-    fetch(endpointUrl).then(async (res) => {
+    fetch($apiUrl).then(async (res) => {
       notes.set((await res.json()).notes);
     });
   };
@@ -26,7 +32,6 @@
       })
       .replace(/-/g, "");
 
-    console.log(todaysDate);
     const daysMatchTodaysDate = (await logseq.DB.datascriptQuery(`[
       :find (pull ?p [*])
       :where
@@ -35,7 +40,6 @@
       [?p :block/journal-day ?d]
       [(= ?d ${todaysDate})]
     ]`)) as PageEntity[][];
-    console.log(daysMatchTodaysDate);
     const todayPage = daysMatchTodaysDate[0][0];
 
     logseq.Editor.insertBlock(todayPage.uuid, note);
@@ -46,6 +50,10 @@
       insertNote(note);
     });
   });
+
+  logseq.onSettingsChanged((after, _before) => {
+    endpointBaseUrl.set(after[SETTING_ENUM.apiUrl]);
+  });
 </script>
 
 <DialogContainer>
@@ -55,21 +63,27 @@
     class="mt-12 max-w-md h-min justify-self-end mr-8 p-4 rounded-md shadow-md"
     on:click|stopPropagation|preventDefault={() => undefined}
   >
-    <div class="mb-4 flex justify-between">
-      <button on:click={a}>Add notes from slipbox</button>
+    <div class="mb-4 flex justify-between items-center">
+      {#if $endpointBaseUrl == ""}
+        <p class="h-min mr-4">You need to setup the API →</p>
+      {:else}
+        <button on:click={a}>Add notes from slipbox</button>
+      {/if}
       <button on:click={b}>⚙️</button>
     </div>
 
-    <p class="diminished">
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      Visit
-      <a
-        href="#"
-        on:click|preventDefault={() => {
-          window.open(endpointUrl, "_blank");
-        }}>{endpointUrl}</a
-      > on your phone to add notes.
-    </p>
+    {#if $endpointBaseUrl != ""}
+      <p class="diminished">
+        <!-- svelte-ignore a11y-invalid-attribute -->
+        Visit
+        <a
+          href="#"
+          on:click|preventDefault={() => {
+            window.open($endpointBaseUrl, "_blank");
+          }}>{$endpointBaseUrl}</a
+        > on your phone to add notes.
+      </p>
+    {/if}
   </main>
 </DialogContainer>
 

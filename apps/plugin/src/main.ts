@@ -1,11 +1,14 @@
 import "./app.pcss";
 import "@logseq/libs";
 import App from "./App.svelte";
+import { SETTINGS_SCHEMA } from "./libs/settings";
 
 const main = async () => {
   new App({
     target: document.getElementById("app"),
   });
+
+  logseq.useSettingsSchema(SETTINGS_SCHEMA);
 
   const createModel = () => ({
     show: () => {
