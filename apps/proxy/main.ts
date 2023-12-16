@@ -1,4 +1,6 @@
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { DB } from "https://deno.land/x/sqlite@v3.8/mod.ts";
+import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import { logRequest } from "./lib/middleware/logger.ts";
 import { timeRequest } from "./lib/middleware/timing.ts";
 import { AppState, AuthorizedAppState } from "./lib/middleware/_types.ts";
@@ -6,7 +8,7 @@ import {
   authorizedOr401,
   updateAuthState,
 } from "./lib/middleware/authorization.ts";
-import { DB } from "https://deno.land/x/sqlite@v3.8/mod.ts";
+
 import {
   addNote,
   allUserUnprocessedNotes,
@@ -26,6 +28,8 @@ try {
 
 const db = new DB(dbPath);
 const app = new Application<AppState>();
+// Enable CORS for all routes
+app.use(oakCors());
 
 app.use(logRequest, timeRequest);
 app.use(updateAuthState);
