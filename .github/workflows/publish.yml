@@ -56,7 +56,7 @@ jobs:
         run: |
           pnpm build
           mkdir ${{ env.PLUGIN_NAME }}
-          cp LICENSE README.md package.json public/logo.png ${{ env.PLUGIN_NAME }}
+          cp ../../LICENSE README.md package.json public/logo.png ${{ env.PLUGIN_NAME }}
           mv dist ${{ env.PLUGIN_NAME }}
           zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
           echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> $GITHUB_OUTPUT
