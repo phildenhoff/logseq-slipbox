@@ -23,10 +23,10 @@ COPY . /app
 WORKDIR /app
 
 # Expose the port your Deno app will run on
-EXPOSE 8000
+EXPOSE 61230
 
 # Start Tailscale in userspace mode and then start Deno server
 CMD tailscaled --tun=userspace-networking & sleep 10 \
   && tailscale up --hostname=slipbox\
-  && tailscale serve --bg localhost:8000 \
+  && tailscale serve --bg localhost:61230 \
   && deno run --allow-net --allow-read --allow-write main.ts /data/app/slipbox.db
