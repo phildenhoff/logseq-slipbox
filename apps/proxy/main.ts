@@ -69,5 +69,5 @@ app.use(authorizedOr401);
 app.use(apiRoutesWithAuth.routes());
 app.use(apiRoutesWithAuth.allowedMethods());
 
-console.log("Listening on http://localhost:61230");
-await app.listen({ hostname: "localhost", port: 61230 });
+console.log("Listening on http://127.0.0.1:61230");
+await app.listen({ hostname: "127.0.0.1", port: 61230 });
