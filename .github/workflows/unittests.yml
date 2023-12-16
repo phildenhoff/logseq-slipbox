@@ -1,22 +1,25 @@
 name: Unit tests
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main]
+    branches: [main]
 jobs:
   tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/plugin
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-    - uses: pnpm/action-setup@v2.2.2
-      with:
-        version: 6.0.2
-    - name: Install dependencies
-      run: pnpm install
-    - name: Run unit tests
-      run: pnpm test
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 6.0.2
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run unit tests
+        run: pnpm test
