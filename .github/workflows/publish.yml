@@ -25,7 +25,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: "apps/plugin/.nvmrc"
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm

@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: "apps/plugin/.nvmrc"
       - uses: pnpm/action-setup@v2.2.2
         with:
           version: 6.0.2
