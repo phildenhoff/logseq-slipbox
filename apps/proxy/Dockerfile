@@ -28,4 +28,5 @@ EXPOSE 8000
 # Start Tailscale in userspace mode and then start Deno server
 CMD tailscaled --tun=userspace-networking & sleep 10 \
   && tailscale up --hostname=slipbox\
+  && tailscale serve --bg localhost:8000 \
   && deno run --allow-net --allow-read --allow-write main.ts /data/app/slipbox.db
