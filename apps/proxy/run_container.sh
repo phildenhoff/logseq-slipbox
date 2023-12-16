@@ -7,4 +7,4 @@ docker run \
   --name=slipbox \
   -v slipbox:/data \
   -p 8000:8000 \
-  slipbox
+  ghcr.io/phildenhoff/logseq-slipbox:main
