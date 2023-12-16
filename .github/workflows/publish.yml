@@ -9,7 +9,7 @@ on:
       - "v*" # Release for any tag that starts with "v"
 
 env:
-  PLUGIN_NAME: your-plugin-name-here
+  PLUGIN_NAME: slipbox
 
 jobs:
   build:
