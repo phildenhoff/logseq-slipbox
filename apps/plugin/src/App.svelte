@@ -4,28 +4,36 @@
   import type { PageEntity } from "@logseq/libs/dist/LSPlugin.user";
   const notes = writable<Array<string>>([]);
 
+  const endpointUrl = "https://slipbox.beardie-cloud.ts.net/api/v1/notes";
+
   const a = () => {
-    fetch("https://carafe.beardie-cloud.ts.net/api/v1/notes").then(
-      async (res) => {
-        notes.set((await res.json()).notes);
-      },
-    );
+    fetch(endpointUrl).then(async (res) => {
+      notes.set((await res.json()).notes);
+    });
   };
 
   const insertNote = async (note: string) => {
     // todays date, formatted as YYYYMMDD
-    const todaysDate = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const todaysDate = new Date()
+      .toLocaleDateString("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/-/g, "");
 
-    const todayPage = (
-      (await logseq.DB.datascriptQuery(`[
+    console.log(todaysDate);
+    const daysMatchTodaysDate = (await logseq.DB.datascriptQuery(`[
       :find (pull ?p [*])
       :where
       [?b :block/page ?p]
       [?p :block/journal? true]
       [?p :block/journal-day ?d]
       [(= ?d ${todaysDate})]
-    ]`)) as PageEntity[][]
-    )[0][0];
+    ]`)) as PageEntity[][];
+    console.log(daysMatchTodaysDate);
+    const todayPage = daysMatchTodaysDate[0][0];
+
     logseq.Editor.insertBlock(todayPage.uuid, note);
   };
 
