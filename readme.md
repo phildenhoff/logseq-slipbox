@@ -63,4 +63,8 @@ This is the domain name you'll use on your phone and in the plugin during setup.
 
 ### 4. Add the plugin to Logseq
 
-CONTENT TK
+Download the latest `slipbox.zip` release from the [releases page](https://github.com/phildenhoff/logseq-slipbox/releases).
+
+Extract the zip file and copy the `slipbox` folder to your Logseq plugins folder — that's something like `$USER/.logseq/plugins`.
+
+Reload Logseq, and you should have a new Slipbox icon in the Plugins menu.
