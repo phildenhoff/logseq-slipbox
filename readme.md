@@ -1,6 +1,7 @@
 # slipbox
 
 A plugin & self-hosted server for writing notes on-the-go, and saving them to Logseq later.
+Requires Tailscale.
 
 <p align="center">
   <picture style="max-width: 800px">
@@ -11,7 +12,9 @@ A plugin & self-hosted server for writing notes on-the-go, and saving them to Lo
 
 ## Setup
 
-Deploy the docker container, add it to your Tailscale net, and you're good to go!
+You'll need to set up the Docker container to run the slipbox server, and add the plugin to Logseq.
+
+For the server, deploy the docker container, add it to your Tailscale net, and you're good to go!
 
 ### 1. Download the container
 
@@ -21,10 +24,11 @@ docker pull ghcr.io/phildenhoff/logseq-slipbox:main
 
 ### 2. Run the container
 
-We need to create two folders in our app config folder: `tailscale` and `app`.
+Our container needs a permenant storage location to store the database and config files, which we'll say is /path/to/your/config for now.
+This can also be a Docker volume, but that slightly complicates things.
 
-You can either create a new volume, or mount /data in the container to a folder
-on your host machine. In this example, we'll create a new volume called `slipbox`.
+Within the config folder, you MUST create two folders: `tailscale` and `app`.
+The server will not start without these folders.
 
 ```fish
 cd /path/to/your/config
@@ -55,3 +59,8 @@ Click the link, and add the server to your network.
 You should see a success page. Once you do, you can close the browser tab; slipbox is now ready to use!
 
 If you've set up Magic DNS, you can now go to `https://slipbox.<your tailnet>.ts.net` to access the server.
+This is the domain name you'll use on your phone and in the plugin during setup.
+
+### 4. Add the plugin to Logseq
+
+CONTENT TK
