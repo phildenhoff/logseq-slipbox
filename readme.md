@@ -68,3 +68,25 @@ Download the latest `slipbox.zip` release from the [releases page](https://githu
 Extract the zip file and copy the `slipbox` folder to your Logseq plugins folder — that's something like `$USER/.logseq/plugins`.
 
 Reload Logseq, and you should have a new Slipbox icon in the Plugins menu.
+
+## Development
+
+### Server (`proxy`)
+
+You must have Taiscale installed and running on your machine.
+
+First, run the server using Deno, with required permissions. The final argument is the location of your SQLite database.
+
+```fish
+cd apps/proxy
+deno run --allow-read --allow-write --allow-net main.ts slipbox.db
+```
+
+This will start the server on port 61230, **but it will not be accessible yet**.
+`proxy` requires all requests to be authenticated by Tailscale, so we need to setup Tailscale to send requests to the dev server, using [`tailscale serve`](https://tailscale.com/kb/1242/tailscale-serve).
+
+Then, we'll be able to access our server by visiting `https://<your-device>.<your-tailnet>.ts.net`.
+
+```fish
+tailscale server 127.0.0.1:61230
+```
