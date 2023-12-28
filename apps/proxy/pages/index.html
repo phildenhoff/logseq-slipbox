@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="bg-white dark:bg-slate-900 transition-colors">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,16 +51,19 @@
   </head>
   <body>
     <div class="p-5 m-4 flex flex-col items-center max-w-full max-h-full">
-      <h1 class="text-3xl font-bold mb-3">Logseq Slipbox</h1>
+      <h1 class="text-3xl font-bold mb-3 dark:text-slate-50 transition-colors">Logseq Slipbox</h1>
 
-      <form class="flex flex-col" onsubmit="onSubmit(event)">
+      <form
+        class="flex flex-col w-full items-center"
+        onsubmit="onSubmit(event)"
+      >
         <textarea
-          class="border-2 rounded-md border-gray-300 w-72 h-36 p-2 mb-2"
+          class="border-2 rounded-md border-gray-300 w-2/5 h-36 p-2 mb-2 dark:bg-slate-800 dark:text-slate-50 transition-colors "
           name="content"
           placeholder="I had this great idea..."
         ></textarea>
         <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-500 dark:bg-blue-400 hover:bg-blue-700 dark:hover:bg-blue-600 text-slate-100 dark:text-slate-900 font-bold py-2 px-4 mt-2 rounded w-1/5 transition-colors"
           type="submit"
         >
           Save
