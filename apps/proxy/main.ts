@@ -34,13 +34,6 @@ app.use(oakCors());
 app.use(logRequest, timeRequest);
 app.use(updateAuthState);
 
-const uiRoutesWithAuth = new Router<AuthorizedAppState>();
-uiRoutesWithAuth.get("/", (ctx) => {
-  ctx.response.body = Deno.readTextFileSync("./pages/index.html");
-});
-app.use(uiRoutesWithAuth.routes());
-app.use(uiRoutesWithAuth.allowedMethods());
-
 const apiRoutesWithAuth = new Router<AuthorizedAppState>({
   prefix: "/api/v1",
 });
@@ -72,6 +65,13 @@ apiRoutesWithAuth.get("/notes", (ctx) => {
 app.use(authorizedOr401);
 app.use(apiRoutesWithAuth.routes());
 app.use(apiRoutesWithAuth.allowedMethods());
+
+app.use(async (context) => {
+  await context.send({
+    root: `${Deno.cwd()}/public`,
+    index: "index.html",
+  });
+});
 
 console.log("Listening on http://127.0.0.1:61230");
 await app.listen({ hostname: "127.0.0.1", port: 61230 });
