@@ -11,6 +11,7 @@ import {
 
 import {
   addNote,
+  allUserNotes,
   allUserUnprocessedNotes,
   userIdFromLogin,
 } from "./models/notes.ts";
@@ -54,10 +55,17 @@ apiRoutesWithAuth.post("/note", async (ctx) => {
   ctx.response.body = "OK";
 });
 apiRoutesWithAuth.get("/notes", (ctx) => {
+  const params = ctx.request.url.searchParams;
   const userLogin = ctx.state.user.login;
 
   const userId = userIdFromLogin(userLogin);
-  const rows = allUserUnprocessedNotes(userId, db);
+
+  let rows = [];
+  if (params.has("all")) {
+    rows = allUserNotes(userId, db);
+  } else {
+    rows = allUserUnprocessedNotes(userId, db);
+  }
 
   ctx.response.body = { notes: rows.map((row) => row.content) };
   ctx.response.status = 200;
