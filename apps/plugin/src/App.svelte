@@ -42,7 +42,10 @@
     ]`)) as PageEntity[][];
     const todayPage = daysMatchTodaysDate[0][0];
 
-    logseq.Editor.insertBlock(todayPage.uuid, note);
+    logseq.Editor.insertBlock(
+      todayPage.uuid,
+      `${note} ${logseq.settings[SETTING_ENUM.tags]}`,
+    );
   };
 
   notes.subscribe((next) => {

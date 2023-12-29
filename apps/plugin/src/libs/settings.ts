@@ -1,5 +1,6 @@
 export const SETTING_ENUM = {
   apiUrl: "API_URL",
+  tags: "TAGS",
 } as const;
 
 export const SETTINGS_SCHEMA = [
@@ -10,5 +11,13 @@ export const SETTINGS_SCHEMA = [
     key: SETTING_ENUM.apiUrl,
     title: "API URL",
     type: "string",
-  } as const,
-];
+  },
+  {
+    default: "",
+    description:
+      "Tags to add at the end of every imported note.",
+    key: SETTING_ENUM.tags,
+    title: "Default tags",
+    type: "string",
+  }
+] as const;
