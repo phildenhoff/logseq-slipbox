@@ -45,7 +45,7 @@
     "description": "Text notes to your Logseq graph.",
     "title": "Logseq Slipbox",
     "author": "phildenhoff",
-    "icon": "./public/logo.png",
+    "icon": "logo.png",
     "repo": "phildenhoff/logseq-slipbox"
   }
 }
