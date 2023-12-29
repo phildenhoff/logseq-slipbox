@@ -7,6 +7,7 @@
   const endpointBaseUrl = writable<string>(
     logseq.settings[SETTING_ENUM.apiUrl],
   );
+  const shouldDisplayAllNotes = writable<boolean>(false);
 
   const apiUrl = derived(endpointBaseUrl, (endpointBaseUrl) => {
     return `${endpointBaseUrl}/api/v1/notes`;
@@ -14,12 +15,25 @@
 
   const a = () => {
     fetch($apiUrl).then(async (res) => {
-      notes.set((await res.json()).notes);
+      (await res.json()).notes.forEach((note) => insertNote(note));
     });
   };
 
   const b = () => {
     logseq.showSettingsUI();
+  };
+
+  const displayAllNotes = () => {
+    if ($shouldDisplayAllNotes) {
+      shouldDisplayAllNotes.set(false);
+      return;
+    }
+
+    fetch($apiUrl + "?all").then(async (res) => {
+      const allNotes = (await res.json()).notes;
+      notes.set(allNotes);
+      shouldDisplayAllNotes.set(true);
+    });
   };
 
   const insertNote = async (note: string) => {
@@ -48,12 +62,6 @@
     );
   };
 
-  notes.subscribe((next) => {
-    next.forEach((note) => {
-      insertNote(note);
-    });
-  });
-
   logseq.onSettingsChanged((after, _before) => {
     endpointBaseUrl.set(after[SETTING_ENUM.apiUrl]);
   });
@@ -70,10 +78,26 @@
       {#if $endpointBaseUrl == ""}
         <p class="h-min mr-4">You need to setup the API →</p>
       {:else}
-        <button on:click={a}>Add notes from slipbox</button>
+        <div class="flex justify-start gap-2 items-center">
+          <button on:click={a}>Add notes from slipbox</button>
+          <button on:click={displayAllNotes}>⋮</button>
+        </div>
       {/if}
       <button on:click={b}>⚙️</button>
     </div>
+
+    {#if $shouldDisplayAllNotes}
+      <div class="__notes_container grid gap-1 p-4 max-h-96 overflow-y-auto mb-4">
+        {#each $notes as note}
+          <div
+            class="__note_item flex flex-row justify-between items-center p-4"
+          >
+            <p>{note}</p>
+            <button on:click={() => insertNote(note)}>+</button>
+          </div>
+        {/each}
+      </div>
+    {/if}
 
     {#if $endpointBaseUrl != ""}
       <p class="diminished">
@@ -99,6 +123,14 @@
     color: rgb(148, 148, 168);
   }
 
+  .__notes_container {
+    background-color: #1e1e2a;
+  }
+
+  .__note_item {
+    background-color: #0f0f14;
+  }
+
   @media (prefers-color-scheme: light) {
     main {
       background-color: #fff;
@@ -106,6 +138,14 @@
 
     p.diminished {
       color: rgb(97, 97, 120);
+    }
+
+    .__note_item {
+      background-color: #fff;
+    }
+
+    .__notes_container {
+      background-color: #f9f9fe;
     }
   }
 </style>
