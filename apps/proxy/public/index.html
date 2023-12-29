@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html class="bg-white dark:bg-slate-900 transition-colors">
+<html class="bg-slate-50 dark:bg-slate-900 transition-colors">
   <head>
     <meta charset="UTF-8" />
+    <title>Slipbox</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f8fafc">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -58,7 +64,7 @@
         onsubmit="onSubmit(event)"
       >
         <textarea
-          class="border-2 rounded-md border-gray-300 w-2/5 h-36 p-2 mb-2 dark:bg-slate-800 dark:text-slate-50 transition-colors "
+          class="border-2 rounded-md border-gray-300 w-72 h-36 p-2 mb-2 dark:bg-slate-800 dark:text-slate-50 transition-colors "
           name="content"
           placeholder="I had this great idea..."
         ></textarea>
