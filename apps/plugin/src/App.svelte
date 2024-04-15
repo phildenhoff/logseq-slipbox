@@ -15,7 +15,13 @@
 
   const insertAllNotes = () => {
     fetch($apiUrl).then(async (res) => {
-      (await res.json()).notes.forEach((note) => insertNote(note));
+      return Promise.allSettled((await res.json()).notes.map((note) => insertNote(note)));
+    }).then((result) => {
+      if (result.length === 0) {
+        logseq.UI.showMsg("Nothing to import");
+      } else {
+        logseq.UI.showMsg("All slipbox notes imported!");
+      }
     });
   };
 
