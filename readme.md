@@ -88,5 +88,5 @@ This will start the server on port 61230, **but it will not be accessible yet**.
 Then, we'll be able to access our server by visiting `https://<your-device>.<your-tailnet>.ts.net`.
 
 ```fish
-tailscale server 127.0.0.1:61230
+tailscale serve 127.0.0.1:61230
 ```
