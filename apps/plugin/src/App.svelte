@@ -13,13 +13,13 @@
     return `${endpointBaseUrl}/api/v1/notes`;
   });
 
-  const a = () => {
+  const insertAllNotes = () => {
     fetch($apiUrl).then(async (res) => {
       (await res.json()).notes.forEach((note) => insertNote(note));
     });
   };
 
-  const b = () => {
+  const openSettings = () => {
     logseq.showSettingsUI();
   };
 
@@ -79,11 +79,11 @@
         <p class="h-min mr-4">You need to setup the API →</p>
       {:else}
         <div class="flex justify-start gap-2 items-center">
-          <button on:click={a}>Add notes from slipbox</button>
+          <button on:click={insertAllNotes}>Add notes from slipbox</button>
           <button on:click={displayAllNotes}>⋮</button>
         </div>
       {/if}
-      <button on:click={b}>⚙️</button>
+      <button on:click={openSettings}>⚙️</button>
     </div>
 
     {#if $shouldDisplayAllNotes}
