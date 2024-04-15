@@ -11,6 +11,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      const showSuccessToast = () => {
+        const successEl = document.getElementById("success");
+        successEl.parentElement.hidden = false;
+        successEl.textContent = "Note saved.";
+        setTimeout(() => {
+          successEl.parentElement.hidden = true;
+        }, 2000);
+      };
+
+      const showErrorToast = () => {
+        const errorElement = document.getElementById("error_summary");
+        errorElement.parentElement.hidden = false;
+        errorElement.textContent = "Error, your note was not saved.";
+
+        const errorDeetsEl = document.getElementById("error_details");
+        errorDeetsEl.textContent = error.message;
+        console.error({ error });
+        setTimeout(() => {
+          errorElement.parentElement.hidden = true;
+        }, 5000)
+      };
+
+      const clearNotesContent = () => {
+        const noteEl = document.getElementById("note_content");
+        noteEl.value = "";
+      }
+
       const onSubmit = (/** @type {FormDataEvent} */ event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -33,24 +60,11 @@
             return response.body;
           })
           .then((data) => {
-            const successEl = document.getElementById("success");
-            successEl.parentElement.hidden = false;
-            successEl.textContent = "Note saved.";
-            setTimeout(() => {
-              successEl.parentElement.hidden = true;
-            }, 2000);
+            clearNotesContent();
+            showSuccessToast();
           })
           .catch((error) => {
-            const errorElement = document.getElementById("error_summary");
-            errorElement.parentElement.hidden = false;
-            errorElement.textContent = "Error, your note was not saved.";
-
-            const errorDeetsEl = document.getElementById("error_details");
-            errorDeetsEl.textContent = error.message;
-            console.error({ error });
-            setTimeout(() => {
-              errorElement.parentElement.hidden = true;
-            }, 5000);
+            showErrorToast();
           });
       };
     </script>
@@ -64,6 +78,7 @@
         onsubmit="onSubmit(event)"
       >
         <textarea
+          id="note_content"
           class="border-2 rounded-md border-gray-300 w-72 h-36 p-2 mb-2 dark:bg-slate-800 dark:text-slate-50 transition-colors "
           name="content"
           placeholder="I had this great idea..."
