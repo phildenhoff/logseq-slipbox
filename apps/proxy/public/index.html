@@ -38,9 +38,11 @@
         noteEl.value = "";
       }
 
-      const onSubmit = (/** @type {FormDataEvent} */ event) => {
-        event.preventDefault();
-        event.stopPropagation();
+      const onSubmit = (/** @type {FormDataEvent | undefined} */ event) => {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
 
         const form = document.querySelector("form");
         const data = new FormData(form);
@@ -67,6 +69,16 @@
             showErrorToast();
           });
       };
+
+      window.addEventListener('load', () => {
+        // Register event listener so that CMD+Enter submits form
+        const noteEl = document.getElementById("note_content");
+        noteEl.addEventListener('keydown', function(e) {
+        	if(e.keyCode == 13 && e.metaKey) {
+            onSubmit();
+        	}
+        });
+      })
     </script>
   </head>
   <body>
